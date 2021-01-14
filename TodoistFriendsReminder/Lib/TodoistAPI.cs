@@ -38,6 +38,35 @@ namespace TodoistFriendsReminder.Lib
             this.APIKEY = Helpers.GetEnvironmentVariable("TAPIKEY");
         }
 
+        public async void CreateTask()
+        {
+            var builder = new UriBuilder("https://api.todoist.com/rest/v1/tasks");
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                using (var request = new HttpRequestMessage(new HttpMethod("POST"), builder.ToString().Replace("\r\n", string.Empty)))
+                {
+                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {this.APIKEY}");
+                    request.Headers.Add("X-Request-Id", $"{Guid.NewGuid()}");
+
+                    request.Content = new StringContent("{\"content\": \"Appointment with Maria\"}",Encoding.UTF8,
+                                    "application/json");
+                    // TODO: Other paramters:
+                    // \"due_string\": \"tomorrow at 12:00\", \"due_lang\": \"en\", \"priority\": 4
+
+                    Task<HttpResponseMessage> response = httpClient.SendAsync(request);
+
+                    System.Console.WriteLine(response.Result.StatusCode);
+                }
+
+            }
+
+
+        }
+
         public async Task<List<TaskModel>> fetch()
         {
             var builder = new UriBuilder("https://api.todoist.com/rest/v1/tasks");
