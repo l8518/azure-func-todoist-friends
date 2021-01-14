@@ -6,6 +6,13 @@
       "path": "friends/friends.json",
       "direction": "out",
       "connection": "MyStorageConnection"
+    },
+    {
+      "name": "friends",
+      "type": "blob",
+      "path": "friends/friends.json",
+      "direction": "in",
+      "connection": "MyStorageConnection"
     }
   ]
 }

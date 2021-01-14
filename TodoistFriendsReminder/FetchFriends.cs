@@ -17,7 +17,7 @@ namespace TodoistFriendsReminder
     public static class FetchFriends
     {
         [FunctionName("FetchFriends")]
-        public static async void Run([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer,
+        public static async void Run([TimerTrigger("0 */60 * * * *")] TimerInfo myTimer,
             [Blob("friends/friends.json", FileAccess.Write)] TextWriter friendsOutput, ILogger log)
         {
             // Basic API-key Based Todoist API
@@ -30,7 +30,6 @@ namespace TodoistFriendsReminder
             {
                 if (task.content.StartsWith("* ")) {
                     var friend = new Friend(task.content.Remove(0, 2));
-                    Console.WriteLine(friend.name);
                     friends.Add(friend);
                 }
             }

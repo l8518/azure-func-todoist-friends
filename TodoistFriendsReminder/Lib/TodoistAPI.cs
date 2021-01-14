@@ -38,7 +38,7 @@ namespace TodoistFriendsReminder.Lib
             this.APIKEY = Helpers.GetEnvironmentVariable("TAPIKEY");
         }
 
-        public async void CreateTask()
+        public async void CreateTask(string taskContent)
         {
             var builder = new UriBuilder("https://api.todoist.com/rest/v1/tasks");
 
@@ -52,14 +52,10 @@ namespace TodoistFriendsReminder.Lib
                     request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {this.APIKEY}");
                     request.Headers.Add("X-Request-Id", $"{Guid.NewGuid()}");
 
-                    request.Content = new StringContent("{\"content\": \"Appointment with Maria\"}",Encoding.UTF8,
+                    request.Content = new StringContent($"{{\"content\": \"{taskContent}\", \"due_string\": \"today\" }}", Encoding.UTF8,
                                     "application/json");
-                    // TODO: Other paramters:
-                    // \"due_string\": \"tomorrow at 12:00\", \"due_lang\": \"en\", \"priority\": 4
 
-                    Task<HttpResponseMessage> response = httpClient.SendAsync(request);
-
-                    System.Console.WriteLine(response.Result.StatusCode);
+                    HttpResponseMessage response = await httpClient.SendAsync(request);
                 }
 
             }
@@ -87,8 +83,6 @@ namespace TodoistFriendsReminder.Lib
                     Task<HttpResponseMessage> response = httpClient.SendAsync(request);
 
                     var resp = await response.Result.Content.ReadAsStringAsync();
-
-                    Console.WriteLine("DEBUG");
 
                     List<TaskModel> tasks = JsonConvert.DeserializeObject<List<TaskModel>>(resp);
 
