@@ -7,12 +7,6 @@ trigger:
 - main
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: $(subscription-id)
-
-  # Function app name
-  functionAppName: $(function-app-name)
-
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
 
@@ -70,7 +64,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
-              azureSubscription: '$(azureSubscription)'
+              azureSubscription: '$(subscription-id)'
               appType: functionApp
-              appName: $(functionAppName)
+              appName: $(function-app-name)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
