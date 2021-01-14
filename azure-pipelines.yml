@@ -7,7 +7,6 @@ trigger:
 - main
 
 variables:
-  subscriptionId: $(subscription-id)
   functionAppName: $(function-app-name)
   # Agent VM image name
   vmImageName: 'vs2017-win2016'
@@ -64,7 +63,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
-              azureSubscription: $(subscriptionId)
+              azureSubscription: 'azure-todoist-service-connection'
               appType: functionApp
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
