@@ -6,7 +6,12 @@ namespace TodoistFriendsReminder.Lib
 {
     class Friend
     {
-        public string content { get; set; }
 
+        public string name { get; set; }
+
+        public Friend(string name)
+        {
+            this.name = name;
+        }
     }
 }
