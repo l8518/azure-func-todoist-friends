@@ -17,7 +17,7 @@ namespace TodoistFriendsReminder
     public static class FetchFriends
     {
         [FunctionName("FetchFriends")]
-        public static async void Run([TimerTrigger("0 */60 * * * *")] TimerInfo myTimer,
+        public static async void Run([TimerTrigger("%FETCH_SCHEDULE%")] TimerInfo myTimer,
             [Blob("friends/friends.json", FileAccess.Write)] TextWriter friendsOutput, ILogger log)
         {
             // Basic API-key Based Todoist API

@@ -13,7 +13,7 @@ namespace TodoistFriendsReminder
     {
         [FunctionName("CreateReminder")]
         public static void Run(
-            [TimerTrigger("0 */240 * * * *")]TimerInfo myTimer,
+            [TimerTrigger("%REMINDER_SCHEDULE%")]TimerInfo myTimer,
             [Blob("friends/friends.json", FileAccess.Read)] TextReader friendsReader,
             ILogger log)
         {
