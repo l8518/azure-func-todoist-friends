@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,7 +39,7 @@ namespace TodoistFriendsReminder.Lib
             this.APIKEY = Helpers.GetEnvironmentVariable("TAPIKEY");
         }
 
-        public async void CreateTask(string taskContent)
+        public async void CreateTask(string taskContent, long? projectId)
         {
             var builder = new UriBuilder("https://api.todoist.com/rest/v1/tasks");
 
@@ -52,12 +53,21 @@ namespace TodoistFriendsReminder.Lib
                     request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {this.APIKEY}");
                     request.Headers.Add("X-Request-Id", $"{Guid.NewGuid()}");
 
-                    request.Content = new StringContent($"{{\"content\": \"{taskContent}\", \"due_string\": \"today\" }}", Encoding.UTF8,
+                    JObject requestObj = new JObject();
+
+                    requestObj.Add("content", taskContent);
+                    requestObj.Add("due_string", "today");
+                    
+                    if (projectId.HasValue)
+                    {
+                        requestObj.Add("project_id", projectId.Value);
+                    }
+                    
+                    request.Content = new StringContent(requestObj.ToString(), Encoding.UTF8,
                                     "application/json");
 
                     HttpResponseMessage response = await httpClient.SendAsync(request);
                 }
-
             }
 
 

@@ -22,8 +22,10 @@ namespace TodoistFriendsReminder
             TodoistAPI api = new Lib.TodoistAPI();
 
             List<Friend> friends = JsonConvert.DeserializeObject<List<Friend>>(friendsReader.ReadToEnd());
+            long? todoistProjectId = long.TryParse(Helpers.GetEnvironmentVariable("TPROJID"), out long f) ? f : default(long?);
             int index = random.Next(friends.Count);
-            api.CreateTask($"Contact {friends[index].name}");
+
+            api.CreateTask($"Contact {friends[index].name}", todoistProjectId);
 
         }
     }
